@@ -21,6 +21,14 @@ jobs:
     - name: Grant execute permission
       run: chmod +x gradlew
 
+    - name: Create keystore for signing
+      run: |
+        mkdir -p app/keystores
+        keytool -genkey -v -keystore app/keystores/release.jks \
+          -alias release -keyalg RSA -keysize 2048 -validity 10000 \
+          -storepass release123 -keypass release123 \
+          -dname "CN=Android, OU=Develop, O=MyApp, L=City, ST=State, C=US"
+
     - name: Build Release APK
       run: ./gradlew assembleRelease --no-daemon --no-scan
 
